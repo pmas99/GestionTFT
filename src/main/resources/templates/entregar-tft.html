@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es"><head>
+    <meta charset="UTF-8">
+    <title>Detalles TFT</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <h1>Entregar TFt</h1>
+    <h2>Debes subir a la plataforma un archivo pdf de máximo 20 MB</h2>
+    <div class="actions">
+        <form th:action="@{/subir-memoria/{id}(id=${tft.id})}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept="application/pdf">
+            <button type="submit" class="btn btn-primary details-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+
+

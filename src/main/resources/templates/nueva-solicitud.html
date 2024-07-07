@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Nueva Solicitud</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="../img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B;"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div>
+        <h2>Solicitud para la realización del TFT con título: <span th:text="${tft.titulo}"></span> </h2>
+        <form class="form-container" method="POST" th:action="@{/nueva-solicitud/{id}(id=${tft.id})}" enctype="multipart/form-data">
+            <div class="form-field">
+                <label for="description">Describa a continuación su motivación para realizar este trabajo así como propuestas de cambio y/o mejora</label><br>
+                <textarea id="description" name="description" rows="6"></textarea>
+            </div>
+            <div class="form-field">
+                <label for="file">Adjunte aquí su CV, Expediente y otra documentación solicitada:</label><br>
+                <input type="file" id="file" name="file" accept=".pdf">
+            </div>
+            <div class="actions">
+                <button type="submit" class="button">Solicitar TFT</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="actions">
+    <a href="javascript:history.back()" class="button">Volver</a>
+</div>
+<script src="https://kit.fontawesome.com/01e5fce1e5.js" crossorigin="anonymous"></script>
+</body>
+</html>

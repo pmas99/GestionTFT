@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<head>
+    <meta charset="UTF-8">
+    <title>Herramienta de Gestión de TFT</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="main">
+        <p>En la siguiente tabla se muestra una lista de todos los TFTs disponibles</p>
+        <div class="filters">
+            <input type="text" id="filterTextTitle" class="filter" onkeyup="applyFilter()" placeholder="Buscar por títulos...">
+            <select id="departamentoFilter" class="filter" onchange="applyFilter()">
+                <option value="">Todos los departamentos</option>
+                <option th:each="departamento : ${departamentos}" th:value="${departamento}" th:text="${departamento}"></option>
+            </select>
+            <select id="tutorFilter" class="filter" onchange="applyFilter()">
+                <option value="">Todos los tutores</option>
+                <option th:each="tutor : ${tutores}" th:value="${tutor}" th:text="${tutor}"></option>
+            </select>
+            <select id="titulacionFilter" class="filter" onchange="applyFilter()">
+                <option value="">Todas las titulaciones</option>
+                <option th:each="titulacion : ${titulaciones}" th:value="${titulacion.nombre}" th:text="${titulacion.nombre}"></option>
+            </select>
+            <select id="disponibilidadFilter" class="filter" onchange="applyFilter()">
+                <option value="">Cualquier disponibilidad</option>
+                <option value="Tiempo completo">Tiempo completo</option>
+                <option value="Compatible con trabajo a tiempo parcial">Compatible con trabajo a tiempo parcial</option>
+                <option value="Compatible con trabajo a tiempo completo">Compatible con trabajo a tiempo completo</option>
+            </select>
+            <select id="becaFilter" class="filter" onchange="applyFilter()">
+                <option value="">Disponibilidad de beca...</option>
+                <option value="Sí">Sí</option>
+                <option value="No">No</option>
+            </select>
+        </div>
+        <table id="tablaTFT">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Tutor</th>
+                    <th>Descripción</th>
+                    <th>Departamento</th>
+                    <th>Titulación</th>
+                    <th>Disponibilidad</th>
+                    <th>Posibilidad de beca</th>
+                    <Th>Acciones</Th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr class="clickable-row" th:each="tft : ${tfts}" th:data-href="@{'/detalles-tft/' + ${tft.id}}">
+                <td th:text="${tft.getTitulo()}"></td>
+                <td th:text="${tft.tutor.getNombre()}"></td>
+                <td th:text="${tft.getDescripcion()}"></td>
+                <td th:text="${tft.tutor.departamento.nombre}"></td>
+                <td th:text="${tft.titulacion.nombre}"></td>
+                <td th:text="${tft.disponibilidad}"></td>
+                <td th:text="${tft.beca ? 'Sí' : 'No' }"></td>
+                <td>
+                    <a sec:authorize="hasRole('ROLE_Alumno')" th:href="@{'/nueva-solicitud/' + ${tft.id}}"
+                       class="table-button">
+                        Solicitar TFT
+                    </a>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var rows = document.querySelectorAll('.clickable-row');
+            rows.forEach(function(row) {
+                row.addEventListener('click', function() {
+                    window.location = row.getAttribute('data-href');
+                });
+            });
+        });
+        function applyFilter() {
+
+            var filterTitleInput = document.getElementById("filterTextTitle").value.toUpperCase();
+            var filterDepartamento = document.getElementById("departamentoFilter").value.toUpperCase();
+            var filterTutor = document.getElementById("tutorFilter").value.toUpperCase();
+
+            var filterTitulacion = document.getElementById("titulacionFilter").value.toUpperCase();
+            var filterDisponibilidad = document.getElementById("disponibilidadFilter").value.toUpperCase();
+            var filterBeca = document.getElementById("becaFilter").value.toUpperCase()
+
+            var table = document.getElementById("tablaTFT");
+            var tr = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < tr.length; i++) {
+                var tdTitle = tr[i].getElementsByTagName("td")[0];
+                var tdTutor = tr[i].getElementsByTagName("td")[1];
+                var tdDepartamento = tr[i].getElementsByTagName("td")[3];
+
+                var tdTitulacion = tr[i].getElementsByTagName("td")[4];
+                var tdDisponibilidad = tr[i].getElementsByTagName("td")[5];
+                var tdBeca = tr[i].getElementsByTagName("td")[6];
+
+                if (tdTitle && tdDepartamento && tdTutor && tdTitulacion && tdDisponibilidad && tdBeca) {
+                    var txtValueTitle = tdTitle.textContent || tdTitle.innerText;
+                    var txtValueDepartamento = tdDepartamento.textContent || tdDepartamento.innerText;
+                    var txtValueTutor = tdTutor.textContent || tdTutor.innerText;
+                    var txtValueTitulacion = tdTitulacion.textContent || tdTitulacion.innerText;
+                    var txtValueDisponibilidad = tdDisponibilidad.textContent || tdDisponibilidad.innerText;
+                    var txtValueBeca = tdBeca.textContent || tdBeca.innerText;
+
+                    if (txtValueTitle.toUpperCase().indexOf(filterTitleInput) > -1 &&
+                        (filterDepartamento === "" || txtValueDepartamento.toUpperCase().indexOf(filterDepartamento) > -1) &&
+                        (filterTutor === "" || txtValueTutor.toUpperCase().indexOf(filterTutor) > -1) &&
+                        // Y aquí es donde usas los valores de tus nuevos campos de filtro.
+                        (filterTitulacion === "" || txtValueTitulacion.toUpperCase().indexOf(filterTitulacion) > -1) &&
+                        (filterDisponibilidad === "" || txtValueDisponibilidad.toUpperCase().indexOf(filterDisponibilidad) > -1) &&
+                        (filterBeca === "" || txtValueBeca.toUpperCase().indexOf(filterBeca) > -1)) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://kit.fontawesome.com/01e5fce1e5.js" crossorigin="anonymous"></script>
+</div>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles TFT</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="../img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B;"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B;"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B;"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <h1>Detalles de la solicitud</h1>
+    <div class="details-container" th:if="${solicitud.tipo} == 'Solicitud'">
+        <div class="field">
+            <strong>Título del TFT:</strong> <span th:text="${solicitud.tft.titulo}"></span>
+        </div>
+        <div class="field">
+            <strong>Alumno:</strong> <span th:text="${solicitud.alumno.nombre}"></span>
+        </div>
+        <div class="field">
+            <strong>Carta de Motivación:</strong> <span th:text="${solicitud.descripcion}"></span>
+        </div>
+        <div class="field">
+            <a th:href="@{'/descargarCV/' + ${solicitud.id}}" class="button">Descargar CV</a><br>
+            <a th:href="@{'/detalles-tft/' + ${solicitud.tft.id}}" class="button">Ver TFT</a>
+        </div>
+        <div sec:authorize="hasRole('ROLE_Tutor')">
+            <form method="post" th:action="@{/solicitudAceptada}" onsubmit="return confirm('¿Seguro que quiere aceptar la solicitud? Se rechazarán automaticamente el resto de solicitudes para el mismo TFT');">
+                <input type="hidden" name="solicitudId" th:value="${solicitud.id}" />
+                <input class="button submit" type="submit" value="Aceptar Solicitud" />
+            </form>
+            <form method="post" th:action="@{/solicitudCancelada}" onsubmit="return confirm('¿Seguro que quiere cancelar la solicitud?');">
+                <input type="hidden" name="solicitudId" th:value="${solicitud.id}" />
+                <input class="button cancel" type="submit" value="Rechazar Solicitud" />
+            </form>
+        </div>
+    </div>
+    <div class="details-container" th:if="${solicitud.tipo} == 'Propuesta'">
+        <div class="field">
+            <strong>Título del TFT:</strong> <span th:text="${solicitud.tft.titulo}"></span>
+        </div>
+        <div class="field">
+            <strong>Alumno:</strong> <span th:text="${solicitud.alumno.nombre}"></span>
+        </div>
+        <div class="field">
+            <strong>Descripción del TFT:</strong> <span th:text="${solicitud.tft.descripcion}"></span>
+        </div>
+        <div class="field">
+            <strong>Objetivos del TFT:</strong> <span th:text="${solicitud.tft.objetivos}"></span>
+        </div>
+        <div class="field">
+            <strong>Metodología del TFT:</strong> <span th:text="${solicitud.tft.metodologia}"></span>
+        </div>
+        <div class="field">
+            <strong>Resultados esperados:</strong> <span th:text="${solicitud.tft.resultadosEsperados}"></span>
+        </div>
+        <div sec:authorize="hasRole('ROLE_Tutor')">
+            <form method="post" th:action="@{/solicitudAceptada}" onsubmit="return confirm('¿Seguro que quiere aceptar la solicitud? Se rechazarán automaticamente el resto de solicitudes para el mismo TFT');">
+                <input type="hidden" name="solicitudId" th:value="${solicitud.id}" />
+                <input class="button submit" type="submit" value="Aceptar Propuesta" />
+            </form>
+            <form method="post" th:action="@{/solicitudCancelada}" onsubmit="return confirm('¿Seguro que quiere cancelar la solicitud?');">
+                <input type="hidden" name="solicitudId" th:value="${solicitud.id}" />
+                <input class="button cancel" type="submit" value="Rechazar Propuesta" />
+            </form>
+        </div>
+    </div>
+    <div class="details-container" th:if="${solicitud.tipo} == 'Validacion'">
+        <div class="field">
+            <strong>Título del TFT:</strong> <span th:text="${solicitud.tft.titulo}"></span>
+        </div>
+        <div class="field">
+            <strong>Alumno:</strong> <span th:text="${solicitud.alumno.nombre}"></span>
+        </div>
+        <div class="field">
+            <strong>Descripción del TFT:</strong> <span th:text="${solicitud.tft.descripcion}"></span>
+        </div>
+        <div class="field">
+            <strong>Objetivos del TFT:</strong> <span th:text="${solicitud.tft.objetivos}"></span>
+        </div>
+        <div class="field">
+            <strong>Resultados esperados:</strong> <span th:text="${solicitud.tft.resultadosEsperados}"></span>
+        </div>
+        <div class="field">
+            <a th:href="@{'/descargar-memoria/' + ${solicitud.tft.id}}" class="button">Descargar Memoria</a><br>
+            <a th:href="@{'/detalles-tft/' + ${solicitud.tft.id}}" class="button">Ver TFT</a>
+        </div>
+        <div sec:authorize="hasRole('ROLE_Tutor')">
+            <form method="post" th:action="@{/solicitudAceptada}" onsubmit="return confirm('¿Seguro que quiere aceptar la solicitud? Se rechazarán automaticamente el resto de solicitudes para el mismo TFT');">
+                <input type="hidden" name="solicitudId" th:value="${solicitud.id}" />
+                <input class="button submit" type="submit" value="Validar Memoria" />
+            </form>
+            <form method="post" th:action="@{/solicitudCancelada}" onsubmit="return confirm('¿Seguro que quiere cancelar la solicitud?');">
+                <input type="hidden" name="solicitudId" th:value="${solicitud.id}" />
+                <input class="button cancel" type="submit" value="Rechazar Memoria" />
+            </form>
+        </div>
+    </div>
+</div>
+<div class="actions">
+    <a href="javascript:history.back()" class="button">Volver</a>
+</div>
+<script src="https://kit.fontawesome.com/01e5fce1e5.js" crossorigin="anonymous"></script>
+</body>
+</html>

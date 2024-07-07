@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalles TFT</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="../img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B;"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B;"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <h1>Detalles de TFT</h1>
+    <div class="details-container">
+        <div class="field">
+            <strong>Título:</strong> <span th:text="${tft.titulo}"></span>
+        </div>
+        <div class="field">
+            <strong>Tutor:</strong> <span th:text="${tft.tutor != null ? tft.tutor.nombre : 'N/A'}"></span>
+        </div>
+        <div class="field">
+            <strong>Alumno:</strong> <span th:text="${tft.alumno != null ? tft.alumno.nombre : 'N/A'}"></span>
+        </div>
+        <div class="field">
+            <strong>Titulación:</strong> <span th:text="${tft.titulacion != null ? tft.titulacion.nombre : 'N/A'}"></span>
+        </div>
+        <div class="field">
+            <strong>Descripción:</strong> <span th:text="${tft.descripcion}"></span>
+        </div>
+        <div class="field">
+            <strong>Objetivos:</strong> <span th:text="${tft.objetivos}"></span>
+        </div>
+        <div class="field">
+            <strong>Metodología:</strong> <span th:text="${tft.metodologia}"></span>
+        </div>
+        <div class="field">
+            <strong>Resultados esperados:</strong> <span th:text="${tft.resultadosEsperados}"></span>
+        </div>
+        <div class="field">
+            <strong>Estado:</strong> <span th:text="${tft.estado != null ? tft.estado.toString() : 'N/A'}"></span>
+        </div>
+        <div class="field">
+            <strong>Calificación:</strong> <span th:text="${tft.calificacion != null ? tft.calificacion : 'Aun no ha sido calificado'}"></span>
+        </div>
+        <div class="field">
+            <strong>Disponibilidad:</strong> <span th:text="${tft.disponibilidad != null ? tft.disponibilidad : 'N/A'}"></span>
+        </div>
+        <div class="field">
+            <strong>Titulación:</strong> <span th:text="${tft.titulacion != null ? tft.titulacion.nombre : 'N/A'}"></span>
+        </div>
+        <div class="field">
+            <strong>Departamento:</strong> <span th:text="${tft.tutor != null ? (tft.tutor.departamento != null ? tft.tutor.departamento.nombre : 'N/A') : 'N/A'}"></span>
+        </div>
+        <div class="field">
+            <strong>Posibilidad de Beca:</strong> <span th:text="${tft.beca != null ? (tft.beca ? 'Sí' : 'No') : 'N/A'}"></span>
+        </div>
+
+    </div>
+</div>
+<div class="actions">
+    <a href="javascript:history.back()" class="button">Volver</a>
+</div>
+<script src="https://kit.fontawesome.com/01e5fce1e5.js" crossorigin="anonymous"></script>
+</body>
+</html>
+

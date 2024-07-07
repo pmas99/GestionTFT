@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herramienta de Gestión de TFTs</title>
+    <link rel="stylesheet" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+        <div class="main-content">
+        <div class="content">
+            <p>Hola, <span th:text="${name}"></span> bienvenido a la herramienta de gestión de TFT de la universidad politécnica de Madrid. Desde este portal podrás gestionar tus TFT. Toda la normativa que regula el proceso está publicada en <a href="https://www.etsit.upm.es" target="_blank">etsit.upm.es</a>.</p>
+            <p>Has accedido al sistema bajo el rol de <span th:text="${role}"></span>
+        </div>
+    </div>
+</div>
+<script src="https://kit.fontawesome.com/01e5fce1e5.js" crossorigin="anonymous"></script>
+</body>
+</html>
+
+

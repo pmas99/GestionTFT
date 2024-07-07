@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>NUevo TFT</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B;"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <h1>Nuevo TFT</h1>
+    <div>
+        <form class="form-container" method="POST" th:action="@{/nuevo-tft}" enctype="multipart/form-data">
+            <div class="form-field">
+                <label for="titulo">Título:</label><br>
+                <textarea id="titulo" name="titulo" rows="4" cols="50" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="descripcion">Descripción:</label><br>
+                <textarea id="descripcion" name="descripcion" rows="4" cols="50" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="objetivos">Objetivos:</label><br>
+                <textarea id="objetivos" name="objetivos" rows="4" cols="50" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="metodologia">Metodología:</label><br>
+                <textarea id="metodologia" name="metodologia" rows="4" cols="50" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="resultados">Resultados esperados:</label><br>
+                <textarea id="resultados" name="resultados" rows="4" cols="50" required></textarea>
+            </div>
+            <div class="form-field">
+                <label for="titulacion">Titulación:</label><br>
+                <select id="titulacion" name="titulacion" required>
+                    <option value="" disabled selected>Selecciona una titulación</option>
+                    <option th:each="titulacion : ${titulaciones}" th:value="${titulacion.id}" th:text="${titulacion.nombre}"></option>
+                </select>
+            </div>
+            <div class="form-field" sec:authorize="hasRole('ROLE_Alumno')">
+                <label for="tutor">Tutor:</label><br>
+                <select id="tutor" name="tutorId" required>
+                    <option value="" disabled selected>Selecciona un tutor</option>
+                    <option th:each="tutor : ${tutores}" th:value="${tutor.id}" th:text="${tutor.nombre}"></option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="disponibilidad">Disponibilidad:</label><br>
+                <select id="disponibilidad" name="disponibilidad" required>
+                    <option value="" disabled selected>Selecciona una opción de disponibilidad</option>
+                    <option>Tiempo completo</option>
+                    <option>Compatible con trabajo a tiempo parcial</option>
+                    <option>Compatible con trabajo a tiempo completo</option>
+                </select>
+            </div>
+            <input type="hidden" name="beca" value="false">
+            <div class="form-field">
+                <label for="beca">Posibilidad de beca:</label>
+                <input type="checkbox" id="beca" name="beca">
+            </div>
+            <div class="actions">
+                <button type="submit" class="button">Publicar Tema</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://kit.fontawesome.com/01e5fce1e5.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Herramienta de Gestión de TFT</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="filters">
+        <input type="text" id="filterTextTitle" class="filter" onkeyup="applyFilter()" placeholder="Buscar por títulos...">
+        <select id="titulacionFilter" class="filter" onchange="applyFilter()">
+            <option value="">Todas las titulaciones</option>
+            <option th:each="titulacion : ${titulaciones}" th:value="${titulacion.nombre}" th:text="${titulacion.nombre}"></option>
+        </select>
+        <select id="tipoFilter" class="filter" onchange="applyFilter()">
+            <option value="">Cualquier solicitud</option>
+            <option value="Solicitud">Solicitud de Tema</option>
+            <option value="Propuesta">Propuesta de Tema</option>
+            <option value="Validacion">validación de Memoria</option>
+        </select>
+
+    </div>
+    <table id="tablaTFT">
+        <thead>
+            <tr>
+                <th>Titulo del TFT</th>
+                <th>Alumno</th>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Titulación</th>
+                <th>Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="clickable-row" th:each="solicitud : ${solicitudes}" th:data-href="@{'/detalles-solicitud/' + ${solicitud.id}}">
+                <td th:text="${solicitud.tft.titulo}"></td>
+                <td th:text="${solicitud.alumno.getNombre()}"></td>
+                <td th:text="${solicitud.fecha}"></td>
+                <td th:text="${solicitud.tipo}"></td>
+                <td th:text="${solicitud.tft.titulacion.nombre}"></td>
+                <td th:text="${solicitud.descripcion}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var rows = document.querySelectorAll('.clickable-row');
+        rows.forEach(function(row) {
+            row.addEventListener('click', function() {
+                window.location = row.getAttribute('data-href');
+            });
+        });
+    });
+    function applyFilter() {
+
+        var filterTitleInput = document.getElementById("filterTextTitle").value.toUpperCase();
+
+        var filterTitulacion = document.getElementById("titulacionFilter").value.toUpperCase();
+        var filterTipo = document.getElementById("tipoFilter").value.toUpperCase();
+
+        var table = document.getElementById("tablaTFT");
+        var tr = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < tr.length; i++) {
+            var tdTitle = tr[i].getElementsByTagName("td")[0];
+            var tdTipo = tr[i].getElementsByTagName("td")[3];
+            var tdTitulacion = tr[i].getElementsByTagName("td")[4];
+
+
+            if (tdTitle && tdTipo && tdTitulacion) {
+                var txtValueTitle = tdTitle.textContent || tdTitle.innerText;
+                var txtValueTitulacion = tdTitulacion.textContent || tdTitulacion.innerText;
+                var txtValueTipo = tdTipo.textContent || tdTipo.innerText;
+
+                if (txtValueTitle.toUpperCase().indexOf(filterTitleInput) > -1 &&
+                    (filterTipo === "" || txtValueTipo.toUpperCase().indexOf(filterTipo) > -1) &&
+                    (filterTitulacion === "" || txtValueTitulacion.toUpperCase().indexOf(filterTitulacion) > -1))
+                {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+<script src="https://kit.fontawesome.com/01e5fce1e5.js" crossorigin="anonymous"></script>
+</body>
+</html>

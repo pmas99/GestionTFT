@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Login de Usuarios</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="form-box">
+        <h2>Nuevo Trinual</h2>
+        <form method="POST" th:action="@{/nuevo-tribunal}" enctype="multipart/form-data">
+            <div>
+                <label for="nombre">Nombre:</label><br>
+                <textarea id="nombre" name="nombre" rows="4" cols="50"></textarea>
+            </div>
+            <div>
+                <label for="fecha_examen">Fecha de Examen:</label><br>
+                <input type="date" id="fecha_examen" name="fecha_examen">
+            </div>
+            <div>
+                <label for="secretario">Secretario:</label><br>
+                <select id="secretario" name="secretario">
+                    <option th:each="secretario : ${secretarios}" th:value="${secretario.id}" th:text="${secretario.nombre}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="presidente">Presidente:</label><br>
+                <select id="presidente" name="presidente">
+                    <option th:each="presidente : ${profesores}" th:value="${presidente.id}" th:text="${presidente.nombre}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="vocal">Vocal:</label><br>
+                <select id="vocal" name="vocal">
+                    <option th:each="vocal : ${profesores}" th:value="${vocal.id}" th:text="${vocal.nombre}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="suplente">Suplente:</label><br>
+                <select id="suplente" name="suplente">
+                    <option th:each="suplente : ${profesores}" th:value="${suplente.id}" th:text="${suplente.nombre}"></option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">Guardar Tribunal</button>
+            </div>
+
+
+
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="es"><head>
+    <meta charset="UTF-8">
+    <title>Detalles TFT</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <p>A continuación se muestra la información de los tribunales a los que perteneces</p>
+    <table id="tablaTFT">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Departamento</th>
+            <th>Fecha</th>
+            <th>Lugar</th>
+            <th>Secretario</th>
+            <th>Presidente</th>
+            <th>Vocal</th>
+            <th>Suplente</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="clickable-row" th:each="tribunal : ${tribunales}" th:data-href="@{'/detalles-tribunal/' + ${tribunal.id}}">
+            <td th:text="${tribunal.nombre}"></td>
+            <td th:text="${tribunal.secretario.departamento.nombre}"></td>
+            <td th:text="${tribunal.fechaExamen}"></td>
+            <td th:text="${tribunal.lugar}"></td>
+            <td th:text="${tribunal.secretario.nombre}"></td>
+            <td th:text="${tribunal.presidente.nombre}"></td>
+            <td th:text="${tribunal.vocal.nombre}"></td>
+            <td th:text="${tribunal.suplente.nombre}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/formulario-nuevo-tribunal" class="button">
+        <i class="fa-regular fa-square-plus fa-xl" style="color: #ffffff;"></i>
+        Nuevo Tribunal
+    </a>
+    <a sec:authorize="hasRole('ROLE_PAS')" class="button" href="/tfts-tribunales">Asignar TFTs a tribunales</a>
+
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var rows = document.querySelectorAll('.clickable-row');
+        rows.forEach(function(row) {
+            row.addEventListener('click', function() {
+                window.location = row.getAttribute('data-href');
+            });
+        });
+    });
+</script>
+<script src="https://kit.fontawesome.com/01e5fce1e5.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

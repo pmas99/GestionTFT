@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Trabajos</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+</head>
+<body>
+<div class="header">
+    <div class="logo">
+        <img src="img/logo.png" alt="LOGO ETSIT">
+    </div>
+    <div class="cabecera">
+        <div class="title">HERRAMIENTA DE GESTIÓN DE TFTS - MIS TRABAJOS</div>
+        <div class="header-btns">
+            <a href="/mis-trabajos" class="header-btn">
+                <i class="fa-solid fa-book fa-xl" style="color: #00529B;"></i>
+                Mis trabajos
+            </a>
+            <a href="/temas-tft" class="header-btn">
+                <i class="fa-solid fa-list fa-xl" style="color: #00529B"></i>
+                Temas TFT
+            </a>
+            <a href="/solicitudes" class="header-btn">
+                <i class="fa-solid fa-bell fa-xl" style="color: #00529B"></i>
+                Solicitudes
+            </a>
+            <a href="/tribunales" class="header-btn">
+                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #00529B"></i>
+                Tribunales
+            </a>
+            <a href="/logout" class="header-btn">
+                <i class="fa-solid fa-right-from-bracket fa-xl" style="color: #00529B"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <p>En la siguiente tabla se muestran todos los TFTs
+        <span th:if="${rol == 'ROLE_Alumno'}"> que estás realizando o ya has realizado.</span>
+        <span th:if="${rol == 'ROLE_Tutor'}"> para los que eres o has sido Tutor.</span>
+        <span th:if="${rol == 'ROLE_PAS'}">.</span>
+        <span th:if="${rol == 'ROLE_Secretario'}"> que están asignados a algún tribunal en el que eres secretario.</span>
+    </p>
+    <div class="filters">
+        <input class="filter" type="text" id="filterTextInput" onkeyup="applyFilter()" placeholder="Buscar por títulos...">
+        <select class="filter" id="alumnoSelect" onchange="applyFilter()">
+            <option value="">Todos los alumnos</option>
+            <option th:each="alumno : ${alumnos}" th:value="${alumno}" th:text="${alumno}"></option>
+        </select>
+        <select class="filter" id="tutorSelect" onchange="applyFilter()">
+            <option value="">Todos los tutores</option>
+            <option th:each="tutor : ${tutores}" th:value="${tutor}" th:text="${tutor}"></option>
+        </select>
+    </div>
+    <table id="tablaTFT">
+        <thead>
+        <tr>
+            <th>Título</th>
+            <th>Alumno</th>
+            <th>Tutor</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="clickable-row" th:each="tft : ${tfts}" th:data-href="@{'/detalles-tft/' + ${tft.id}}">
+            <td th:text="${tft.getTitulo()}"></td>
+            <td th:text="${tft.alumno != null ? tft.alumno.getNombre() : 'N/A'}"></td>
+            <td th:text="${tft.tutor != null ? tft.tutor.getNombre() : 'N/A'}"></td>
+            <td th:text="${tft.getDescripcion()}"></td>
+            <td th:text="${tft.estado}"></td>
+            <td>
+                <a sec:authorize="hasRole('ROLE_Alumno')" th:if="${tft.estado == 'En elaboracion'}" th:href="@{'/entregar-tft/' + ${tft.id}}"
+                   class="table-button">
+                    Entregar TFT
+                </a>
+                <a th:if="${tft.memoria != null}" th:href="@{'/descargar-memoria/' + ${tft.id}}"
+                   class="table-button">
+                    Descargar Memoria
+                </a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/nuevo-tft" class="button">
+        <i class="fa-regular fa-square-plus fa-xl" style="color: #ffffff;"></i>
+        Nuevo Tft
+    </a>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var rows = document.querySelectorAll('.clickable-row');
+            rows.forEach(function(row) {
+                row.addEventListener('click', function() {
+                    window.location = row.getAttribute('data-href');
+                });
+            });
+        });
+    </script>
+    <script>
+        function applyFilter() {
+            var filterTitleInput = document.getElementById("filterTextInput").value.toUpperCase();
+            var filterAlumno = document.getElementById("alumnoSelect").value.toUpperCase();
+            var filterTutor = document.getElementById("tutorSelect").value.toUpperCase();
+
+            var table = document.getElementById("tablaTFT");
+            var tr = table.getElementsByTagName("tr");
+
+            for (var i = 1; i < tr.length; i++) {
+                var tdTitle = tr[i].getElementsByTagName("td")[0];
+                var tdAlumno = tr[i].getElementsByTagName("td")[1];
+                var tdTutor = tr[i].getElementsByTagName("td")[2];
+
+                if (tdTitle && tdAlumno && tdTutor) {
+                    var txtValueTitle = tdTitle.textContent || tdTitle.innerText;
+                    var txtValueAlumno = tdAlumno.textContent || tdAlumno.innerText;
+                    var txtValueTutor = tdTutor.textContent || tdTutor.innerText;
+
+                    if (txtValueTitle.toUpperCase().indexOf(filterTitleInput) > -1 &&
+                        (filterAlumno === "" || txtValueAlumno.toUpperCase().indexOf(filterAlumno) > -1) &&
+                        (filterTutor === "" || txtValueTutor.toUpperCase().indexOf(filterTutor) > -1)) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://kit.fontawesome.com/01e5fce1e5.js" crossorigin="anonymous"></script>
+</div>
+</body>
+</html>
